@@ -1,3 +1,13 @@
+/*--------------------------------------------------------*
+ * Disciplina: Programaçao Estruturada e Modular           *
+ *          Prof. Carlos Veríssimo                        *
+ *--------------------------------------------------------*
+ * Objetivo do Programa: Simular uma loja de produtos      *
+ * eletrônicos com funcionalidades de inserção, listagem,  *
+ * ordenação e simulação de compra.                       *
+ * Data - 25/10/2024                                      *
+ *--------------------------------------------------------*/
+
 #include <stdio.h>
 #include <string.h>
 
