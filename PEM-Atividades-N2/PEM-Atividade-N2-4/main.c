@@ -21,7 +21,22 @@ typedef struct {
     int estoque;
 } Produto;
 
-void inserirProduto(Produto *produtos, int *qtd) {
+typedef struct {
+    Produto produtos[MAX_PRODUTOS];
+    int qtdProdutos;
+
+    void (*inserir)(struct Loja *self);
+    void (*listar)(struct Loja *self);
+    void (*ordenar)(struct Loja *self);
+    void (*comprar)(struct Loja *self);
+} Loja;
+
+void inserirProduto(Loja *loja) {
+    if (loja->qtdProdutos >= MAX_PRODUTOS) {
+        printf("Capacidade máxima atingida!\n");
+        return;
+    }
+    
     Produto p;
     printf("ID: ");
     scanf("%d", &p.id);
@@ -33,48 +48,51 @@ void inserirProduto(Produto *produtos, int *qtd) {
     scanf("%f", &p.preco);
     printf("Quantidade em estoque: ");
     scanf("%d", &p.estoque);
-    produtos[(*qtd)++] = p;
+    
+    loja->produtos[loja->qtdProdutos++] = p;
 }
 
-void listarProdutos(Produto *produtos, int qtd) {
-    for (int i = 0; i < qtd; i++) {
+void listarProdutos(Loja *loja) {
+    for (int i = 0; i < loja->qtdProdutos; i++) {
+        Produto p = loja->produtos[i];
         printf("ID: %d, Nome: %s, Descrição: %s, Preço: %.2f, Estoque: %d\n",
-               produtos[i].id, produtos[i].nome, produtos[i].descricao,
-               produtos[i].preco, produtos[i].estoque);
+               p.id, p.nome, p.descricao, p.preco, p.estoque);
     }
 }
 
-void bubbleSort(Produto *produtos, int qtd) {
+void bubbleSort(Loja *loja) {
     Produto temp;
-    for (int i = 0; i < qtd - 1; i++) {
-        for (int j = 0; j < qtd - i - 1; j++) {
-            if (strcmp(produtos[j].nome, produtos[j + 1].nome) > 0) {
-                temp = produtos[j];
-                produtos[j] = produtos[j + 1];
-                produtos[j + 1] = temp;
+    for (int i = 0; i < loja->qtdProdutos - 1; i++) {
+        for (int j = 0; j < loja->qtdProdutos - i - 1; j++) {
+            if (strcmp(loja->produtos[j].nome, loja->produtos[j + 1].nome) > 0) {
+                temp = loja->produtos[j];
+                loja->produtos[j] = loja->produtos[j + 1];
+                loja->produtos[j + 1] = temp;
             }
         }
     }
 }
 
-Produto* buscarProduto(Produto *produtos, int qtd, int id) {
-    for (int i = 0; i < qtd; i++) {
-        if (produtos[i].id == id) {
-            return &produtos[i];
+Produto* buscarProduto(Loja *loja, int id) {
+    for (int i = 0; i < loja->qtdProdutos; i++) {
+        if (loja->produtos[i].id == id) {
+            return &loja->produtos[i];
         }
     }
     return NULL;
 }
 
-void simularCompra(Produto *produtos, int qtd) {
+void simularCompra(Loja *loja) {
     int id, qtdCompra;
     printf("ID do produto para compra: ");
     scanf("%d", &id);
-    Produto *p = buscarProduto(produtos, qtd, id);
+    
+    Produto *p = buscarProduto(loja, id);
     if (p == NULL) {
         printf("Produto Inexistente.\n");
         return;
     }
+    
     printf("Quantidade desejada: ");
     scanf("%d", &qtdCompra);
     if (qtdCompra > p->estoque) {
@@ -86,8 +104,7 @@ void simularCompra(Produto *produtos, int qtd) {
 }
 
 int main() {
-    Produto produtos[MAX_PRODUTOS];
-    int qtdProdutos = 0;
+    Loja loja = { .qtdProdutos = 0, .inserir = inserirProduto, .listar = listarProdutos, .ordenar = bubbleSort, .comprar = simularCompra };
     int opcao;
 
     do {
@@ -100,14 +117,14 @@ int main() {
 
         switch (opcao) {
             case 1:
-                inserirProduto(produtos, &qtdProdutos);
+                loja.inserir(&loja);
                 break;
             case 2:
-                bubbleSort(produtos, qtdProdutos);
-                listarProdutos(produtos, qtdProdutos);
+                loja.ordenar(&loja);
+                loja.listar(&loja);
                 break;
             case 3:
-                simularCompra(produtos, qtdProdutos);
+                loja.comprar(&loja);
                 break;
         }
     } while (opcao != 4);
