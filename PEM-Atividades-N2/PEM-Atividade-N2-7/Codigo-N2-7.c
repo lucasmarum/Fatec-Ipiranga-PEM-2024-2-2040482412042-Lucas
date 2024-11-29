@@ -7,7 +7,7 @@
 struct Produtos {
     int idproduto;          // Identificador único
     char nomeproduto[50];   // Nome do produto
-    double preçoproduto;    // Preço do produto
+    double precoproduto;    // Preço do produto
     int qtdestoque;         // Quantidade em estoque
 };
 
@@ -44,7 +44,7 @@ void AdicionarProdutos(struct Produtos *produtos, int *quantidade) {
         scanf(" %[^\n]%*c", ptrproduto->nomeproduto);
 
         printf("| Preço: ");
-        while (scanf("%lf", &ptrproduto->preçoproduto) != 1 || ptrproduto->preçoproduto <= 0) {
+        while (scanf("%lf", &ptrproduto->precoproduto) != 1 || ptrproduto->precoproduto <= 0) {
             limpar_buffer();
             printf("Preço inválido. Digite um preço válido (maior que 0): ");
         }
@@ -77,7 +77,7 @@ void AlterarProduto(struct Produtos *produtos, int *quantidade, int *id) {
             scanf(" %[^\n]%*c", produtos[i].nomeproduto);
 
             printf("| Preço: ");
-            while (scanf("%lf", &produtos[i].preçoproduto) != 1 || produtos[i].preçoproduto <= 0) {
+            while (scanf("%lf", &produtos[i].precoproduto) != 1 || produtos[i].precoproduto <= 0) {
                 limpar_buffer();
                 printf("Preço inválido. Digite um preço válido (maior que 0): ");
             }
@@ -108,7 +108,7 @@ void ConsultarProduto(struct Produtos *produtos, int quantidade, int *id) {
             printf("/******************** Produto %d ***************************/\n", *id);
             printf("| Código: %d\n", produtos[i].idproduto);
             printf("| Nome: %s\n", produtos[i].nomeproduto);
-            printf("| Preço: %.2lf\n", produtos[i].preçoproduto);  // Alterado para double
+            printf("| Preço: %.2lf\n", produtos[i].precoproduto);  // Alterado para double
             printf("| Quantidade em Estoque: %d\n", produtos[i].qtdestoque);
             printf("/**************************************************/\n\n");
             return;
@@ -148,7 +148,7 @@ void ListarProdutos(struct Produtos *produtos, int quantidade) {
     for (int i = 0; i < quantidade; i++) {
         printf("| Código: %i\n", produtos[i].idproduto);
         printf("| Nome: %s\n", produtos[i].nomeproduto);
-        printf("| Preço: %.2lf\n", produtos[i].preçoproduto);  // Alterado para double
+        printf("| Preço: %.2lf\n", produtos[i].precoproduto);  // Alterado para double
         printf("| Quantidade em Estoque: %i\n", produtos[i].qtdestoque);
         printf("/**************************************************/\n\n");
     }
